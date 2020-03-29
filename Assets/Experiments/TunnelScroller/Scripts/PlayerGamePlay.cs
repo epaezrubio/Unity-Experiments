@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerGamePlay : MonoBehaviour
+namespace TunnelScroller
 {
-    [SerializeField]
-    PlayerModeChanger playerModeChanger;
-
-    private void OnTriggerEnter(Collider collider)
+    public class PlayerGamePlay : MonoBehaviour
     {
-        PlayerModeScriptable playerMode = playerModeChanger.currentPlayerMode;
-        GameObject go = collider.transform.gameObject;
+        [SerializeField]
+        PlayerModeChanger playerModeChanger;
 
-        if (playerMode.matchingTag != go.tag)
+        private void OnTriggerEnter(Collider collider)
         {
-            Debug.Log("Game Over :)");
+            PlayerModeScriptable playerMode = playerModeChanger.currentPlayerMode;
+            GameObject go = collider.transform.gameObject;
+
+            if (playerMode.matchingTag != go.tag)
+            {
+                Debug.Log("Game Over :)");
+            }
         }
     }
 }

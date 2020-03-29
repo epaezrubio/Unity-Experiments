@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum obstableColor { none, blue, orange, black }
-
-[CreateAssetMenu]
-public class ObstacleScriptable : ScriptableObject
+namespace TunnelScroller
 {
-    [SerializeField]
-    public obstableColor bottom = obstableColor.blue;
+    public enum obstableColor { none, blue, orange, black }
 
-    [SerializeField]
-    public obstableColor left = obstableColor.blue;
+    [CreateAssetMenu]
+    public class ObstacleScriptable : ScriptableObject
+    {
+        [SerializeField]
+        public obstableColor bottom = obstableColor.blue;
 
-    [SerializeField]
-    public obstableColor right = obstableColor.blue;
+        [SerializeField]
+        public obstableColor left = obstableColor.blue;
+
+        [SerializeField]
+        public obstableColor right = obstableColor.blue;
+    }
 }

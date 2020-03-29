@@ -2,47 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContinuousScroll : MonoBehaviour
+namespace TunnelScroller
 {
-    [SerializeField]
-    private GameObject[] scrollObjects = { };
-
-    [SerializeField]
-    private float scrollSpeed = 1f;
-
-    [SerializeField]
-    private float scrollZLimit = -50f;
-
-    private GameObject lastResetObject;
-
-    // Start is called before the first frame update
-    void Start()
+    public class ContinuousScroll : MonoBehaviour
     {
-        lastResetObject = scrollObjects[scrollObjects.Length - 1];
-    }
+        [SerializeField]
+        private GameObject[] scrollObjects = { };
 
-    // Update is called once per frame
-    void Update()
-    {
-        foreach (GameObject scrollObject in scrollObjects)
+        [SerializeField]
+        private float scrollSpeed = 1f;
+
+        [SerializeField]
+        private float scrollZLimit = -50f;
+
+        private GameObject lastResetObject;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            scrollObject.transform.position = scrollObject.transform.position + new Vector3(0, 0, - (scrollSpeed * Time.deltaTime));
+            lastResetObject = scrollObjects[scrollObjects.Length - 1];
         }
 
-        Physics.SyncTransforms();
-
-        foreach (GameObject scrollObject in scrollObjects)
+        // Update is called once per frame
+        void Update()
         {
-            float currentZ = scrollObject.transform.position.z;
-
-            if (currentZ < scrollZLimit)
+            foreach (GameObject scrollObject in scrollObjects)
             {
-                Bounds currentBounds = scrollObject.GetComponent<Collider>().bounds;
-                Bounds refBounds = lastResetObject.GetComponent<Collider>().bounds;
+                scrollObject.transform.position = scrollObject.transform.position + new Vector3(0, 0, -(scrollSpeed * Time.deltaTime));
+            }
 
-                scrollObject.transform.position = scrollObject.transform.position + new Vector3(0, 0, refBounds.center.z + refBounds.extents.z + currentBounds.extents.z - scrollObject.transform.position.z);
+            Physics.SyncTransforms();
 
-                lastResetObject = scrollObject;
+            foreach (GameObject scrollObject in scrollObjects)
+            {
+                float currentZ = scrollObject.transform.position.z;
+
+                if (currentZ < scrollZLimit)
+                {
+                    Bounds currentBounds = scrollObject.GetComponent<Collider>().bounds;
+                    Bounds refBounds = lastResetObject.GetComponent<Collider>().bounds;
+
+                    scrollObject.transform.position = scrollObject.transform.position + new Vector3(0, 0, refBounds.center.z + refBounds.extents.z + currentBounds.extents.z - scrollObject.transform.position.z);
+
+                    lastResetObject = scrollObject;
+                }
             }
         }
     }

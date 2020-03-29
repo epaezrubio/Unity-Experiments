@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class PlayerModeScriptable : ScriptableObject
+namespace TunnelScroller
 {
+    [CreateAssetMenu]
+    public class PlayerModeScriptable : ScriptableObject
+    {
 
-    [SerializeField]
-    public string matchingTag;
+        [SerializeField]
+        public string matchingTag;
 
-    [SerializeField]
-    public Material material;
+        [SerializeField]
+        public Material material;
+    }
 }

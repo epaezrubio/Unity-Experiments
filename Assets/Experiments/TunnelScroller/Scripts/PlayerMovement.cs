@@ -2,44 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+namespace TunnelScroller
 {
-    private int sphereSteps = 3;
-
-    private bool rotating = false;
-    
-
-    void Update()
+    public class PlayerMovement : MonoBehaviour
     {
+        private int sphereSteps = 3;
 
-        if (!rotating)
+        private bool rotating = false;
+
+
+        void Update()
         {
-            if (Input.GetKey("right"))
+
+            if (!rotating)
             {
-                StartCoroutine(RotatePlayer(transform.rotation * Quaternion.Euler(Vector3.forward * 360 / sphereSteps)));
-            } else if (Input.GetKey("left"))
+                if (Input.GetKey("right"))
+                {
+                    StartCoroutine(RotatePlayer(transform.rotation * Quaternion.Euler(Vector3.forward * 360 / sphereSteps)));
+                }
+                else if (Input.GetKey("left"))
+                {
+                    StartCoroutine(RotatePlayer(transform.rotation * Quaternion.Euler(-Vector3.forward * 360 / sphereSteps)));
+                }
+
+            }
+        }
+
+        private IEnumerator RotatePlayer(Quaternion target)
+        {
+            rotating = true;
+
+            while (Mathf.Abs(Quaternion.Angle(transform.rotation, target)) > 1)
             {
-                StartCoroutine(RotatePlayer(transform.rotation * Quaternion.Euler(- Vector3.forward * 360 / sphereSteps)));
+
+                transform.rotation = Quaternion.Lerp(transform.rotation, target, Time.deltaTime * 20);
+                yield return null;
             }
 
-        }
-    }
+            transform.rotation = target;
 
-    private IEnumerator RotatePlayer(Quaternion target)
-    {
-        rotating = true;
+            rotating = false;
 
-        while (Mathf.Abs(Quaternion.Angle(transform.rotation, target)) > 1)
-        {
-
-            transform.rotation = Quaternion.Lerp(transform.rotation, target, Time.deltaTime * 20);
             yield return null;
         }
-
-        transform.rotation = target;
-
-        rotating = false;
-
-        yield return null;
     }
 }

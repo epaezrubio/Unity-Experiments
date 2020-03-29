@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObstaclePad : MonoBehaviour
+namespace TunnelScroller
 {
-    [SerializeField]
-    public GameObject orange;
+    public class ObstaclePad : MonoBehaviour
+    {
+        [SerializeField]
+        public GameObject orange;
 
-    [SerializeField]
-    public GameObject blue;
+        [SerializeField]
+        public GameObject blue;
 
-    [SerializeField]
-    public GameObject black;
+        [SerializeField]
+        public GameObject black;
+    }
 }

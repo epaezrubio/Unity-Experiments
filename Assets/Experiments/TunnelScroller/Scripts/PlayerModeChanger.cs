@@ -2,35 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerModeChanger : MonoBehaviour
+namespace TunnelScroller
 {
-    [SerializeField]
-    private MeshRenderer playerMesh;
-
-    [SerializeField]
-    private PlayerModeScriptable[] playerModes;
-
-    public PlayerModeScriptable currentPlayerMode;
-
-    private int currentMaterialIndex = -1;
-    private void Start()
+    public class PlayerModeChanger : MonoBehaviour
     {
-        SetNextPlayerMaterial();
-    }
+        [SerializeField]
+        private MeshRenderer playerMesh;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown("space"))
+        [SerializeField]
+        private PlayerModeScriptable[] playerModes;
+
+        public PlayerModeScriptable currentPlayerMode;
+
+        private int currentMaterialIndex = -1;
+        private void Start()
         {
             SetNextPlayerMaterial();
         }
-    }
 
-    private void SetNextPlayerMaterial()
-    {
-        currentMaterialIndex = (currentMaterialIndex + 1) % playerModes.Length;
+        private void Update()
+        {
+            if (Input.GetKeyDown("space"))
+            {
+                SetNextPlayerMaterial();
+            }
+        }
 
-        currentPlayerMode = playerModes[currentMaterialIndex];
-        playerMesh.material = currentPlayerMode.material;
+        private void SetNextPlayerMaterial()
+        {
+            currentMaterialIndex = (currentMaterialIndex + 1) % playerModes.Length;
+
+            currentPlayerMode = playerModes[currentMaterialIndex];
+            playerMesh.material = currentPlayerMode.material;
+        }
     }
 }
