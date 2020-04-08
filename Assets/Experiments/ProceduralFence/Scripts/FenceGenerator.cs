@@ -8,53 +8,54 @@ namespace ProceduralFence
     {
         private GameObject pole;
 
-        private float plankWidth = 1f;
-        private float minPlankWidth = 0.5f;
+        private float plankWidth;
 
         private List<GameObject> plankVariations;
 
-        public FenceGenerator(GameObject pole, List<GameObject> plankVariations)
+        public FenceGenerator(GameObject pole, List<GameObject> plankVariations, float plankWidth = 1f)
         {
             this.pole = pole;
             this.plankVariations = plankVariations;
+            this.plankWidth = plankWidth;
         }
 
-        public List<GenerationPoint> GetGenerationPoints(Vector3 origin, Vector3 target)
+        public List<GenerationPoint> GetGenerationPoints(Vector3 origin, Vector3 target, bool startPole = true, bool endPole = true)
         {
-            Vector3 direction = target - origin;
-
-            float angle = Vector3.SignedAngle(Vector3.right, direction, Vector3.up);
-
-            Quaternion rotation = Quaternion.Euler(0, angle, 0);
 
             float fenceLength = Vector3.Distance(origin, target);
 
             float fenceCount = fenceLength / plankWidth;
-            int roundedFenceCount = (int)fenceCount;
-            float fenceOffset = (fenceCount - roundedFenceCount) * plankWidth;
+            float roundedFenceCount = Mathf.Floor(fenceCount) + 1;
+            float plankLeftOver = fenceCount - roundedFenceCount;
 
-            if (fenceOffset > 0 && fenceOffset < plankWidth)
-            {
-                roundedFenceCount--;
-            }
+            float computedPlankWidth = plankWidth + ((plankLeftOver / roundedFenceCount) * plankWidth);
+            float computedPlankScale = computedPlankWidth / plankWidth;
 
             List<GenerationPoint> generationPoints = new List<GenerationPoint>();
 
-            for (int i = 0; i < roundedFenceCount; i++)
+            Vector3 direction = target - origin;
+            Quaternion rotation = Quaternion.Euler(0, Vector3.SignedAngle(Vector3.right, direction, Vector3.up), 0);
+
+            for (int i = 0; i < roundedFenceCount + 1; i++)
             {
-                Vector3 posePosition = Vector3.ClampMagnitude(direction, plankWidth * i);
+                bool createPole = (i > 0 && i < roundedFenceCount) || (i == 0 && startPole) || (i == roundedFenceCount && endPole);
+                bool createPlank = i < roundedFenceCount;
 
-                generationPoints.Add(
-                    new GenerationPoint(pole, origin + posePosition, rotation)
-                );
-
-                if (i < roundedFenceCount - 1)
+                if (createPole)
                 {
-
-                    Vector3 planksPosition = Vector3.ClampMagnitude(direction, plankWidth * (i + 0.5f));
+                    Vector3 posePosition = Vector3.ClampMagnitude(direction, computedPlankWidth * i);
 
                     generationPoints.Add(
-                        new GenerationPoint(plankVariations[0], origin + planksPosition, rotation)
+                        new GenerationPoint(pole, origin + posePosition, rotation, Vector3.one)
+                    );
+                }
+
+                if (createPlank)
+                {
+                    Vector3 plankPosition = Vector3.ClampMagnitude(direction, computedPlankWidth * (i + 0.5f));
+
+                    generationPoints.Add(
+                        new GenerationPoint(plankVariations[0], origin + plankPosition, rotation, Vector3.one * computedPlankScale)
                     );
                 }
             }
