@@ -150,9 +150,57 @@ Transform:
   m_Children:
   - {fileID: 1380476183}
   - {fileID: 1424873422}
+  - {fileID: 1307420966}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1307420965
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1307420966}
+  - component: {fileID: 1307420967}
+  m_Layer: 0
+  m_Name: Wall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1307420966
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307420965}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1271433484}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1307420967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307420965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37354f39e999e54499b721a7343f7635, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 1469779166}
+  pole: {fileID: 4218215907317431972, guid: 5c2419c7886e59443b38b5af28a83a42, type: 3}
+  planks: {fileID: 6204874271451769067, guid: 1fbf855bc6f6dd1418c29bb29a7fb572, type: 3}
+  plankSize: 4
 --- !u!1 &1380476182
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1424873422
 Transform:
   m_ObjectHideFlags: 0
@@ -293,6 +341,7 @@ MonoBehaviour:
   camera: {fileID: 1469779166}
   pole: {fileID: 7704440568774807942, guid: e6533ccadf90aef4bb1ae06f28588054, type: 3}
   planks: {fileID: 8808149114795963798, guid: c1776e034c309d44d9cde53bb327f080, type: 3}
+  plankSize: 1
 --- !u!1 &1469779161
 GameObject:
   m_ObjectHideFlags: 0

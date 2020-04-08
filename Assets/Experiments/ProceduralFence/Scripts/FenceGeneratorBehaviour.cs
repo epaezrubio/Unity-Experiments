@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ProceduralFence
 {
+
 	public class FenceGeneratorBehaviour : MonoBehaviour
 	{
 		[SerializeField]
@@ -20,7 +21,24 @@ namespace ProceduralFence
 
 		private FenceGenerator fenceGenerator;
 
-		private Vector3 lastPoint = Vector3.zero;
+		private FenceGeneratorState generatorState;
+
+		public void GenerateFence(Vector3 source, Vector3 target, bool startPole = false, bool endPole = false)
+		{
+			List<GenerationPoint> generationPoints = this.fenceGenerator.GetGenerationPoints(source, target, startPole, endPole);
+
+			foreach (GenerationPoint generationPoint in generationPoints)
+			{
+				GameObject go = Instantiate(generationPoint.gameObject, generationPoint.position, generationPoint.rotation, transform);
+
+				go.transform.localScale = new Vector3(generationPoint.scale.x, 1, generationPoint.scale.z);
+			}
+		}
+
+		public void SetGeneratorState(FenceGeneratorState state)
+		{
+			this.generatorState = state;
+		}
 
 		private void Start()
 		{
@@ -29,18 +47,8 @@ namespace ProceduralFence
 			fenceVariations.Add(planks);
 
 			fenceGenerator = new FenceGenerator(pole, fenceVariations, plankSize);
-		}
 
-		private void GenerateFence(Vector3 source, Vector3 target, bool closingFence = false)
-		{
-			List<GenerationPoint> generationPoints = this.fenceGenerator.GetGenerationPoints(source, target, lastPoint == Vector3.zero, closingFence);
-
-			foreach (GenerationPoint generationPoint in generationPoints)
-			{
-				GameObject go = Instantiate(generationPoint.gameObject, generationPoint.position, generationPoint.rotation, transform);
-
-				go.transform.localScale = new Vector3(generationPoint.scale.x, 1, generationPoint.scale.z);
-			}
+			SetGeneratorState(new NewFenceState(this));
 		}
 
 		private void Update()
@@ -52,22 +60,78 @@ namespace ProceduralFence
 				Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 				Physics.Raycast(ray, out hit);
 
-				Vector3 target;
+				generatorState.Click(hit);
+			}
+		}
+		public abstract class FenceGeneratorState
+		{
+			protected FenceGeneratorBehaviour generator;
+
+			public FenceGeneratorState(FenceGeneratorBehaviour generator)
+			{
+				this.generator = generator;
+			}
+
+			public abstract void Click(RaycastHit hit);
+		}
+
+		public class NewFenceState : FenceGeneratorState
+		{
+			public NewFenceState(FenceGeneratorBehaviour generator) : base(generator)
+			{
+			}
+
+			public override void Click(RaycastHit hit)
+			{
+				Vector3 inPlaneTarget = new Vector3(hit.point.x, 0, hit.point.z);
 
 				if (hit.transform.tag == "Pole")
 				{
-					target = hit.transform.parent.position;
-				} 
-				else
+					generator.SetGeneratorState(new NewFenceNodeState(generator, inPlaneTarget));
+				}
+				else if (hit.transform.tag == "RaycastPlane")
 				{
-					target = hit.point;
+					generator.SetGeneratorState(new NewFenceNodeState(generator, inPlaneTarget, true));
 				}
 
-				Vector3 inPlaneTarget = new Vector3(target.x, 0, target.z);
+			}
+		}
 
-				GenerateFence(lastPoint, inPlaneTarget, hit.transform.tag != "Pole");
+		public class NewFenceNodeState : FenceGeneratorState
+		{
+			private Vector3 lastPoint;
 
-				lastPoint = inPlaneTarget;
+			private bool isInitialNode = false;
+
+			public NewFenceNodeState(FenceGeneratorBehaviour generator, Vector3 lastPoint, bool isInitialNode = false) : base(generator)
+			{
+				this.lastPoint = lastPoint;
+				this.isInitialNode = isInitialNode;
+			}
+
+			public override void Click(RaycastHit hit)
+			{
+				if (hit.transform.tag == "Pole")
+				{
+					Vector3 inPlaneTarget = new Vector3(hit.transform.position.x, 0, hit.transform.position.z);
+
+					if (Vector3.Distance(inPlaneTarget, lastPoint) > 1)
+					{
+						generator.GenerateFence(lastPoint, inPlaneTarget, isInitialNode);
+					}
+
+					generator.SetGeneratorState(new NewFenceState(generator));
+				}
+				else
+				{
+					Vector3 inPlaneTarget = new Vector3(hit.point.x, 0, hit.point.z);
+
+					generator.GenerateFence(lastPoint, inPlaneTarget, isInitialNode, true);
+
+					lastPoint = inPlaneTarget;
+				}
+
+				isInitialNode = false;
 			}
 		}
 	}
