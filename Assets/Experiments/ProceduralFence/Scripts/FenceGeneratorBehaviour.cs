@@ -32,12 +32,23 @@ namespace ProceduralFence
 				GameObject go = Instantiate(generationPoint.gameObject, generationPoint.position, generationPoint.rotation, transform);
 
 				go.transform.localScale = new Vector3(generationPoint.scale.x, 1, generationPoint.scale.z);
+
+				StartCoroutine(DropFence(go, generationPoints.IndexOf(generationPoint) * 0.01f));
 			}
 		}
 
 		public void SetGeneratorState(FenceGeneratorState state)
 		{
 			this.generatorState = state;
+		}
+
+		private IEnumerator DropFence(GameObject go, float delay)
+		{
+			go.transform.position = go.transform.position + new Vector3(0, 10, 0);
+			
+			yield return new WaitForSeconds(delay);
+
+			LeanTween.moveY(go, 0, 1.5f).setEase(LeanTweenType.easeOutBounce);
 		}
 
 		private void OnEnable()
