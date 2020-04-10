@@ -40,6 +40,11 @@ namespace ProceduralFence
 			this.generatorState = state;
 		}
 
+		private void OnEnable()
+		{
+			SetGeneratorState(new NewFenceState(this));
+		}
+
 		private void Start()
 		{
 			List<GameObject> fenceVariations = new List<GameObject>();
@@ -47,8 +52,6 @@ namespace ProceduralFence
 			fenceVariations.Add(planks);
 
 			fenceGenerator = new FenceGenerator(pole, fenceVariations, plankSize);
-
-			SetGeneratorState(new NewFenceState(this));
 		}
 
 		private void Update()
