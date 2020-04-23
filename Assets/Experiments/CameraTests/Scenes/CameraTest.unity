@@ -1181,9 +1181,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTarget: {fileID: 1320857893}
   maxDistance: 25
-  clearance: 1
+  clearance: 2.5
   debug: 1
-  easeSpeed: 1
+  easeSpeed: 5
 --- !u!1 &1415452329
 GameObject:
   m_ObjectHideFlags: 0
