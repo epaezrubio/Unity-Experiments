@@ -7,18 +7,18 @@ namespace CameraTests
     public class CameraCollision : MonoBehaviour
     {
         [SerializeField]
-        private Transform cameraTarget;
+        protected Transform cameraTarget;
 
         [SerializeField]
-        private float maxDistance = 25f;
+        protected float maxDistance = 25f;
 
         [SerializeField]
-        private float clearance = 0f;
+        protected float clearance = 0f;
 
         [SerializeField]
-        private bool debug = true;
+        protected bool debug = true;
 
-        private Vector3 angleVector;
+        protected Vector3 angleVector;
         private void Update()
         {
             UpdateCameraDistance();
@@ -54,7 +54,12 @@ namespace CameraTests
 
             if (GetCameraCollision(out cameraCollision))
             {
-                SetCameraDistance(cameraCollision.distance + clearance);
+                SetCameraDistance(cameraCollision.distance - clearance);
+
+            if (debug)
+            {
+                Debug.DrawRay(cameraTarget.position, angleVector);
+            }
             }
             else
             {
@@ -62,7 +67,7 @@ namespace CameraTests
             }
         }
 
-        private void SetCameraDistance(float distance)
+        protected virtual void SetCameraDistance(float distance)
         {
             transform.position = cameraTarget.position + Vector3.ClampMagnitude(angleVector.normalized * maxDistance, distance);
         }
