@@ -15,30 +15,56 @@ namespace CameraTests
         [SerializeField]
         private float clearance = 0f;
 
+        [SerializeField]
+        private bool debug = true;
+
+        private Vector3 angleVector;
         private void Update()
         {
-            Vector3 angleVector = (transform.position - cameraTarget.position).normalized * maxDistance;
+            UpdateCameraDistance();
+        }
 
-            Debug.DrawRay(cameraTarget.position, angleVector);
-
+        private bool GetCameraCollision(out RaycastHit ray)
+        {
             RaycastHit[] hits = Physics.RaycastAll(cameraTarget.position, angleVector, maxDistance);
-
-            bool obstacleFound = false;
 
             foreach (RaycastHit hit in hits)
             {
                 if (hit.transform != cameraTarget)
                 {
-                    transform.position = cameraTarget.position + Vector3.ClampMagnitude(angleVector.normalized * hit.distance, hit.distance - clearance);
-                    obstacleFound = true;
-                    break;
+                    ray = hit;
+                    return true;
                 }
             }
 
-            if (!obstacleFound)
+            ray = new RaycastHit();
+            return false;
+        }
+
+        private void UpdateCameraDistance()
+        {
+            angleVector = (transform.position - cameraTarget.position).normalized * maxDistance;
+
+            if (debug)
             {
-                transform.position = cameraTarget.position + angleVector.normalized * maxDistance;
+                Debug.DrawRay(cameraTarget.position, angleVector);
             }
+
+            RaycastHit cameraCollision;
+
+            if (GetCameraCollision(out cameraCollision))
+            {
+                SetCameraDistance(cameraCollision.distance + clearance);
+            }
+            else
+            {
+                SetCameraDistance(maxDistance);
+            }
+        }
+
+        private void SetCameraDistance(float distance)
+        {
+            transform.position = cameraTarget.position + Vector3.ClampMagnitude(angleVector.normalized * maxDistance, distance);
         }
     }
 }
