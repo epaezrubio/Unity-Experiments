@@ -9,6 +9,7 @@ TagManager:
   - Black
   - Pole
   - RaycastPlane
+  - XRController
   layers:
   - Default
   - TransparentFX
