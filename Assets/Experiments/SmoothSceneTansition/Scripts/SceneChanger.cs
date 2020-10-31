@@ -28,9 +28,9 @@ namespace SmoothSceneTransition {
 		public void OnDoorClosed() {
 			if (animator.GetBool("doors_closed")) {
 				if (SceneManager.GetActiveScene().name == "SmoothSceneTransition2") {
-					SceneManager.LoadScene("SmoothSceneTransition1");
+					SceneManager.LoadSceneAsync("SmoothSceneTransition1");
 				} else {
-					SceneManager.LoadScene("SmoothSceneTransition2");
+					SceneManager.LoadSceneAsync("SmoothSceneTransition2");
 				}
 				
 				animator.SetBool("doors_closed", false);
