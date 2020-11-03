@@ -7,62 +7,37 @@ namespace IKAnimations
 {
     public class RigIKHandler : MonoBehaviour
     {
-        [SerializeField]
-        private float reactionDistance = 4f;
 
         [SerializeField]
-        private List<Transform> leftHandTargets;
-        [SerializeField]
-        private List<Transform> rightHandTargets;
+        private List<Transform> handTargets;
 
         [SerializeField]
-        private TwoBoneIKConstraint leftIKConstraint;
-        [SerializeField]
-        private TwoBoneIKConstraint rightIKConstraint;
+        private TwoBoneIKConstraint IKConstraint;
 
         [SerializeField]
-        private Transform leftIKTarget;
-        [SerializeField]
-        private Transform rightIKTarget;
+        private Transform IKTarget;
 
 
         void Update()
         {
-            Transform closestLeft = GetClosestTarget(leftHandTargets);
-            Transform closestRight = GetClosestTarget(rightHandTargets);
+            Transform closest = GetClosestTarget(handTargets);
 
-            leftIKTarget.position = closestLeft.position;
-            leftIKTarget.rotation = closestLeft.rotation;
-            rightIKTarget.position = closestRight.position;
-            rightIKTarget.rotation = closestRight.rotation;
+            IKTarget.position = closest.position;
+            IKTarget.rotation = closest.rotation;
 
-            float leftDistance = Vector3.Distance(closestLeft.position, transform.position);
-            float rightDistance = Vector3.Distance(closestRight.position, transform.position);
+            float closestDistance = Vector3.Distance(closest.position, transform.position);
 
-            if (leftDistance < 1.5f)
+            if (closestDistance < 1.5f)
             {
-                leftIKConstraint.weight = 1;
+                IKConstraint.weight = 1;
             }
-            else if (leftDistance > 2)
+            else if (closestDistance > 2)
             {
-                leftIKConstraint.weight = 0;
+                IKConstraint.weight = 0;
             }
             else
             {
-                leftIKConstraint.weight = 1 - Mathf.InverseLerp(1.5f, 2, leftDistance);
-            }
-
-            if (rightDistance < 1.5f)
-            {
-                rightIKConstraint.weight = 1;
-            }
-            else if (rightDistance > 2)
-            {
-                rightIKConstraint.weight = 0;
-            }
-            else
-            {
-                rightIKConstraint.weight = 1 - Mathf.InverseLerp(1.5f, 2, rightDistance);
+                IKConstraint.weight = 1 - Mathf.InverseLerp(1.5f, 2, closestDistance);
             }
         }
 
