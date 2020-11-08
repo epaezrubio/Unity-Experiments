@@ -4559,25 +4559,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 551097dd10125a844affc7af5ca7f289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reactionDistance: 2
-  leftHandTargets:
+  handTargets:
   - {fileID: 1732539987}
   - {fileID: 1204009738}
   - {fileID: 1846747748}
   - {fileID: 1772530894}
   - {fileID: 786133643}
   - {fileID: 1397720470}
-  rightHandTargets:
+  IKConstraint: {fileID: 1502734863}
+  IKTarget: {fileID: 1181863588}
+--- !u!114 &1898591683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898591678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 551097dd10125a844affc7af5ca7f289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handTargets:
   - {fileID: 2081583848}
   - {fileID: 1122937337}
   - {fileID: 1961437195}
   - {fileID: 1227996938}
   - {fileID: 112882685}
   - {fileID: 32671753}
-  leftIKConstraint: {fileID: 1502734863}
-  rightIKConstraint: {fileID: 52001766}
-  leftIKTarget: {fileID: 1181863588}
-  rightIKTarget: {fileID: 1604365285}
+  IKConstraint: {fileID: 52001766}
+  IKTarget: {fileID: 1604365285}
 --- !u!1 &1961437194
 GameObject:
   m_ObjectHideFlags: 0
